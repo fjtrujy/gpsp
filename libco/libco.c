@@ -14,6 +14,8 @@
   #include "scefiber.c"
 #elif defined(PSP)
   #include "psp1.c"
+#elif defined(PS2)
+  #include "ps2.c"
 #elif defined(__GNUC__) && defined(__aarch64__)
   #include "aarch64.c"
 #elif defined(__GNUC__) && (defined(__ARM_EABI__) || defined(__arm__))

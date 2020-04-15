@@ -22,7 +22,10 @@
 // - block memory needs psr swapping and user mode reg swapping
 
 #include "common.h"
-#if defined(VITA)
+
+#if defined(PS2)
+#include <kernel.h>
+#elif defined(VITA)
 #include <psp2/kernel/sysmem.h>
 #include <stdio.h>
 #endif
@@ -227,7 +230,7 @@ extern u8 bit_count[256];
   u32 offset = opcode & 0x07FF                                                \
 
 
-#ifdef PSP
+#if defined(PSP) || defined(PS2)
 
 #include "psp/mips_emit.h"
 
@@ -243,7 +246,11 @@ extern u8 bit_count[256];
 
 /* Cache invalidation */
 
-#if defined(PSP)
+#if defined(PS2)
+#define translate_invalidate_dcache() FlushCache(INVALIDATE_DCACHE)
+#define invalidate_icache_region(addr, size) iInvalidDCache(addr, size)
+
+#elif defined(PSP)
 #define translate_invalidate_dcache() sceKernelDcacheWritebackAll()
 #define invalidate_icache_region(addr, size) (void)0
 

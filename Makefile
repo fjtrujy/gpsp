@@ -194,6 +194,17 @@ else ifeq ($(platform), switch)
         include $(LIBTRANSISTOR_HOME)/libtransistor.mk
         STATIC_LINKING=1
 
+# PS2
+else ifeq ($(platform), ps2)
+	TARGET := $(TARGET_NAME)_libretro_$(platform).a
+	CC = mips64r5900el-ps2-elf-gcc$(EXE_EXT)
+	AR = mips64r5900el-ps2-elf-ar$(EXE_EXT)
+	CFLAGS += -DPS2 -D_EE -G0
+	CFLAGS += -I$(PS2SDK)/ee/include -I$(PS2SDK)/common/include -I$(PS2DEV)/gsKit/include
+	STATIC_LINKING = 1
+	HAVE_DYNAREC = 0
+	CPU_ARCH := mips
+
 # PSP
 else ifeq ($(platform), psp1)
 	TARGET := $(TARGET_NAME)_libretro_$(platform).a
