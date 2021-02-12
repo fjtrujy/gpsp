@@ -2074,7 +2074,7 @@ execute_load_bios_u32a:
   load_u32 bios_read_protect
 
 2:
-  open_load32_a
+  open_load32_core
   nop
 
 execute_load_ewram_u32a:
