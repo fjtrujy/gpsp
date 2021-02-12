@@ -29,6 +29,9 @@
 #include <psp2/kernel/sysmem.h>
 #include <stdio.h>
 #endif
+#if defined(DINGUX)
+#include <asm/cachectl.h>
+#endif
 
 u8 *last_rom_translation_ptr = NULL;
 u8 *last_ram_translation_ptr = NULL;
@@ -230,9 +233,13 @@ extern u8 bit_count[256];
   u32 offset = opcode & 0x07FF                                                \
 
 
-#if defined(PSP) || defined(PS2)
+#if defined(PSP)
 
 #include "psp/mips_emit.h"
+
+#elif defined(PS2)
+
+#include "ps2/mips_emit.h"
 
 #elif defined(ARM_ARCH)
 

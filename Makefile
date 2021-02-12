@@ -202,7 +202,7 @@ else ifeq ($(platform), ps2)
 	CFLAGS += -DPS2 -D_EE -G0
 	CFLAGS += -I$(PS2SDK)/ee/include -I$(PS2SDK)/common/include -I$(PS2DEV)/gsKit/include
 	STATIC_LINKING = 1
-	HAVE_DYNAREC = 0
+	HAVE_DYNAREC = 1
 	CPU_ARCH := mips
 
 # PSP
