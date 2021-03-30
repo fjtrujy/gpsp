@@ -75,9 +75,13 @@
   typedef signed long long int s64;
 #endif
 
-#ifdef USE_BGR_FORMAT
+#if defined(USE_BGR565_FORMAT)
   #define convert_palette(value)  \
     value = ((value & 0x7FE0) << 1) | (value & 0x1F)
+#elif defined(USE_XBGR1555_FORMAT)
+  /* This is the GBA native's format */
+  #define convert_palette(value)  \
+    value = (value & 0x7FFF)
 #else
   #define convert_palette(value) \
     value = ((value & 0x1F) << 11) | ((value & 0x03E0) << 1) | (value >> 10)

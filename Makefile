@@ -210,6 +210,17 @@ else ifeq ($(platform), psp1)
 	HAVE_DYNAREC = 1
 	CPU_ARCH := mips
 
+# PS2
+else ifeq ($(platform), ps2)
+	#include $(PS2SDK)/samples/Makefile.eeglobal
+	TARGET := $(TARGET_NAME)_libretro_$(platform).a
+	CC = mips64r5900el-ps2-elf-gcc$(EXE_EXT)
+	AR = mips64r5900el-ps2-elf-ar$(EXE_EXT)
+	CFLAGS += -DPS2 -G0 -DUSE_XBGR1555_FORMAT -D_EE -I$(PS2SDK)/ee/include/ -I$(PS2SDK)/common/include/
+	STATIC_LINKING = 1
+	HAVE_DYNAREC = 1
+	CPU_ARCH := mips
+
 # Vita
 else ifeq ($(platform), vita)
 	TARGET := $(TARGET_NAME)_libretro_$(platform).a

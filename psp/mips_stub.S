@@ -34,7 +34,6 @@
 .global execute_lsl_flags_reg
 .global execute_lsr_flags_reg
 .global execute_asr_flags_reg
-.global execute_ror_flags_reg
 .global execute_arm_translate_internal
 .global icache_region_sync
 .global reg_check
@@ -49,7 +48,7 @@
 .global memory_map_read
 .global tmemld
 .global tmemst
-.global tmemst
+.global thnjal
 .global reg
 .global spsr
 .global reg_mode
@@ -126,7 +125,7 @@
 .equ SUPERVISOR_SPSR,     (3 * 4 + SPSR_BASE)
 .equ SUPERVISOR_LR,       ((3 * (7 * 4)) + (6 * 4) + REGMODE_BASE)
 .equ FNPTRS_MEMOPS,       (REGMODE_BASE + 196)
-.equ FNPTRS_BASE,         (FNPTRS_MEMOPS + 960)
+.equ FNPTRS_BASE,         (FNPTRS_MEMOPS + 960*2)
 
 .set noat
 .set noreorder
@@ -271,7 +270,7 @@ return_to_main:
   lw $fp, 32($sp)
   lw $ra, 36($sp)
   jr $ra                          # Return to main
-  add $sp, $sp, 48                # Restore stack pointer (delay slot)
+  addiu $sp, $sp, 48              # Restore stack pointer (delay slot)
 
 
 # Perform an indirect branch.
@@ -554,23 +553,11 @@ asr_shift_high:
   jr $ra                          # return
   andi $22, $4, 1                 # c flag = value & 0x01
 
-
-execute_ror_flags_reg:
-  beq $5, $0, ror_zero_shift      # is the shift zero?
-  addiu $1, $5, -1                # $1 = (shift - 1) (delay)
-
-  srav $1, $4, $1                 # $1 = (value >> (shift - 1))
-  andi $22, $1, 1                 # c flag = $1 & 1
-
-ror_zero_shift:
-  jr $ra                          # return
-  rotrv $4, $4, $5                # return (value ror shift) delay
-
 # $4: cycle counter argument
 # $5: pointer to reg
 
 execute_arm_translate_internal:
-  add $sp, $sp, -48               # Store the main thread context
+  addiu $sp, $sp, -48             # Store the main thread context
   sw $s0,  0($sp)
   sw $s1,  4($sp)
   sw $s2,  8($sp)
@@ -643,6 +630,9 @@ tmemld:
   .space 704
 tmemst:
   .space 256
+# Just a copy of the previous tables but encoded as JALs
+thnjal:
+  .space 960
 fnptrs:
   .long update_gba                     # 0
   .long block_lookup_address_arm       # 1
