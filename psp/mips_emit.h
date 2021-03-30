@@ -2808,7 +2808,6 @@ static void emit_pmemld_stub(
     } else if (size == 2) {
       emit_rotate_right(reg_rv, reg_rv, reg_temp, 8 * alignment);
     }
-    mips_emit_jr(mips_reg_ra);   // Return after the call
     generate_function_return_swap_delay();
     *tr_ptr = translation_ptr;
     return;
