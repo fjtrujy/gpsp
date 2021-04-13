@@ -106,17 +106,20 @@ static uint32_t next_pow2(uint32_t v)
 
 static void error_msg(const char* text)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    if (log_cb)
       log_cb(RETRO_LOG_ERROR, "[gpSP]: %s\n", text);
 }
 
 static void info_msg(const char* text)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    if (log_cb)
       log_cb(RETRO_LOG_INFO, "[gpSP]: %s\n", text);
 }
 
 static void show_warning_message(const char* text, unsigned durationms) {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
   unsigned ifversion = 0;
   if (!environ_cb(RETRO_ENVIRONMENT_GET_MESSAGE_INTERFACE_VERSION, &ifversion) || ifversion >= 1) {
     /* Use the new API to display messages */
@@ -140,6 +143,7 @@ static void show_warning_message(const char* text, unsigned durationms) {
 static void audio_buff_status_cb(
       bool active, unsigned occupancy, bool underrun_likely)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    audio_buff_active    = active;
    audio_buff_occupancy = occupancy;
    audio_buff_underrun  = underrun_likely;
@@ -147,6 +151,7 @@ static void audio_buff_status_cb(
 
 static void init_frameskip(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    if (current_frameskip_type == no_frameskip)
    {
       environ_cb(RETRO_ENVIRONMENT_SET_AUDIO_BUFFER_STATUS_CALLBACK, NULL);
@@ -207,6 +212,7 @@ static void init_frameskip(void)
 
 static void video_post_process_cc(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    uint16_t *src = gba_screen_pixels;
    uint16_t *dst = gba_processed_pixels;
    size_t x, y;
@@ -228,6 +234,7 @@ static void video_post_process_cc(void)
 
 static void video_post_process_mix(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    uint16_t *src_curr = gba_screen_pixels;
    uint16_t *src_prev = gba_screen_pixels_prev;
    uint16_t *dst      = gba_processed_pixels;
@@ -258,6 +265,7 @@ static void video_post_process_mix(void)
 
 static void video_post_process_cc_mix(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    uint16_t *src_curr = gba_screen_pixels;
    uint16_t *src_prev = gba_screen_pixels_prev;
    uint16_t *dst      = gba_processed_pixels;
@@ -291,6 +299,7 @@ static void video_post_process_cc_mix(void)
 
 static void init_post_processing(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    size_t buf_size = GBA_SCREEN_PITCH * GBA_SCREEN_HEIGHT * sizeof(u16);
 
    video_post_process = NULL;
@@ -315,6 +324,7 @@ static void init_post_processing(void)
 
       memset(gba_processed_pixels, 0xFFFF, buf_size);
    }
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
 
    /* Initialise 'history' buffer, if required */
    if (!gba_screen_pixels_prev &&
@@ -328,6 +338,7 @@ static void init_post_processing(void)
       memset(gba_screen_pixels_prev, 0xFFFF, buf_size);
    }
 
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    /* Assign post processing function */
    if (post_process_cc && post_process_mix)
       video_post_process = video_post_process_cc_mix;
@@ -335,12 +346,15 @@ static void init_post_processing(void)
       video_post_process = video_post_process_cc;
    else if (post_process_mix)
       video_post_process = video_post_process_mix;
+
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
 }
 
 /* Video post processing END */
 
 static void video_run(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    u16 *gba_screen_pixels_buf = gba_screen_pixels;
 
    if (skip_next_frame)
@@ -355,7 +369,7 @@ static void video_run(void)
       video_post_process();
       gba_screen_pixels_buf = gba_processed_pixels;
    }
-
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
 #if defined(PSP)
    static unsigned int __attribute__((aligned(16))) d_list[32];
    void* texture_vram_p = NULL;
@@ -405,6 +419,7 @@ extern struct retro_perf_callback perf_cb;
 
 void retro_get_system_info(struct retro_system_info* info)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    info->library_name = "gpSP";
 #ifndef GIT_VERSION
 #define GIT_VERSION ""
@@ -418,6 +433,7 @@ void retro_get_system_info(struct retro_system_info* info)
 
 void retro_get_system_av_info(struct retro_system_av_info* info)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    info->geometry.base_width = GBA_SCREEN_WIDTH;
    info->geometry.base_height = GBA_SCREEN_HEIGHT;
    info->geometry.max_width = GBA_SCREEN_WIDTH;
@@ -429,6 +445,7 @@ void retro_get_system_av_info(struct retro_system_av_info* info)
 
 void retro_init(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
 #if defined(HAVE_DYNAREC)
   #if defined(HAVE_MMAP)
    rom_translation_cache = mmap(NULL, ROM_TRANSLATION_CACHE_SIZE,
@@ -484,11 +501,12 @@ void retro_init(void)
     }
   #endif
 #endif
-
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    if (!gamepak_rom)
       init_gamepak_buffer();
    init_sound(1);
 
+printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    if(!gba_screen_pixels)
 #ifdef _3DS
       gba_screen_pixels = (uint16_t*)linearMemAlign(GBA_SCREEN_PITCH * GBA_SCREEN_HEIGHT * sizeof(uint16_t), 128);
@@ -507,10 +525,13 @@ void retro_init(void)
    update_audio_latency   = false;
    selected_bios          = auto_detect;
    selected_boot_mode     = boot_game;
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
 }
 
 void retro_deinit(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
+
    perf_cb.perf_log();
    memory_term();
 
@@ -552,6 +573,8 @@ void retro_deinit(void)
    if (gba_processed_pixels)
       free(gba_processed_pixels);
 #endif
+
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    if (gba_screen_pixels_prev)
       free(gba_screen_pixels_prev);
 
@@ -561,6 +584,7 @@ void retro_deinit(void)
    video_post_process     = NULL;
    post_process_cc        = false;
    post_process_mix       = false;
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
 }
 
 static retro_time_t retro_perf_dummy_get_time_usec() { return 0; }
@@ -571,6 +595,7 @@ static void retro_perf_dummy_counter(struct retro_perf_counter *counter) {};
 
 void retro_set_environment(retro_environment_t cb)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    struct retro_log_callback log;
 
    environ_cb = cb;
@@ -596,10 +621,12 @@ void retro_set_environment(retro_environment_t cb)
 
 void retro_set_video_refresh(retro_video_refresh_t cb)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    video_cb = cb;
 }
 void retro_set_input_poll(retro_input_poll_t cb)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    input_poll_cb = cb;
 }
 
@@ -607,17 +634,20 @@ void retro_set_controller_port_device(unsigned port, unsigned device) {}
 
 void retro_reset(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    update_backup();
    reset_gba();
 }
 
 size_t retro_serialize_size(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    return GBA_STATE_MEM_SIZE;
 }
 
 bool retro_serialize(void* data, size_t size)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    if (size != GBA_STATE_MEM_SIZE)
       return false;
 
@@ -629,6 +659,7 @@ bool retro_serialize(void* data, size_t size)
 
 bool retro_unserialize(const void* data, size_t size)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    if (size != GBA_STATE_MEM_SIZE)
       return false;
 
@@ -639,11 +670,15 @@ bool retro_unserialize(const void* data, size_t size)
 
 void retro_cheat_reset(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
 }
-void retro_cheat_set(unsigned index, bool enabled, const char* code) {}
+void retro_cheat_set(unsigned index, bool enabled, const char* code) {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
+}
 
 static void extract_directory(char* buf, const char* path, size_t size)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    strncpy(buf, path, size - 1);
    buf[size - 1] = '\0';
 
@@ -653,36 +688,21 @@ static void extract_directory(char* buf, const char* path, size_t size)
       *base = '\0';
    else
       strncpy(buf, ".", size);
+      
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
 }
 
 static void check_variables(int started_from_load)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    struct retro_variable var;
    bool frameskip_type_prev;
    bool post_process_cc_prev;
    bool post_process_mix_prev;
 
-#ifdef HAVE_DYNAREC
-   var.key = "gpsp_drc";
-   var.value = NULL;
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
-   {
-      int prevvalue = dynarec_enable;
-      if (strcmp(var.value, "disabled") == 0)
-         dynarec_enable = 0;
-      else if (strcmp(var.value, "enabled") == 0)
-         dynarec_enable = 1;
-
-      if (dynarec_enable != prevvalue)
-         wipe_caches();
-   }
-   else
-      dynarec_enable = 1;
-#else
+printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    dynarec_enable = 0;
-#endif
-
+printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    if (started_from_load) {
      var.key                = "gpsp_bios";
      var.value              = 0;
@@ -735,7 +755,7 @@ static void check_variables(int started_from_load)
    var.value = 0;
 
    frameskip_interval = 0;
-
+printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
       frameskip_interval = strtol(var.value, NULL, 10);
 
@@ -771,7 +791,7 @@ static void check_variables(int started_from_load)
    if ((post_process_cc != post_process_cc_prev) ||
        (post_process_mix != post_process_mix_prev))
       init_post_processing();
-
+printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    if (started_from_load)
    {
       var.key = "gpsp_save_method";
@@ -784,10 +804,12 @@ static void check_variables(int started_from_load)
             use_libretro_save_method = 0;
       }
    }
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
 }
 
 static void set_input_descriptors()
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    struct retro_input_descriptor descriptors[] = {
       { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_LEFT,  "D-Pad Left" },
       { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_UP,    "D-Pad Up" },
@@ -807,6 +829,7 @@ static void set_input_descriptors()
 
 static void set_memory_descriptors(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    const uint64_t mem = RETRO_MEMORY_SYSTEM_RAM;
    struct retro_memory_descriptor desc[9] = {
       { mem, iwram, 0x00000 + 0x8000, 0x3000000, 0, 0,  0x8000, NULL },
@@ -821,6 +844,7 @@ static void set_memory_descriptors(void)
 
 bool retro_load_game(const struct retro_game_info* info)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    if (!info)
       return false;
 
@@ -881,32 +905,38 @@ bool retro_load_game(const struct retro_game_info* info)
       error_msg("Could not load the game file.");
       return false;
    }
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
 
    reset_gba();
 
    set_memory_descriptors();
 
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    return true;
 }
 
 bool retro_load_game_special(unsigned game_type,
                              const struct retro_game_info* info, size_t num_info)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    return false;
 }
 
 void retro_unload_game(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    update_backup();
 }
 
 unsigned retro_get_region(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    return RETRO_REGION_NTSC;
 }
 
 void* retro_get_memory_data(unsigned id)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    switch (id)
    {
    case RETRO_MEMORY_SAVE_RAM:
@@ -922,6 +952,7 @@ void* retro_get_memory_data(unsigned id)
 
 size_t retro_get_memory_size(unsigned id)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    switch (id)
    {
    case RETRO_MEMORY_SAVE_RAM:
@@ -968,6 +999,10 @@ size_t retro_get_memory_size(unsigned id)
 
 void retro_run(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
+
+   // while (1) { printf("Llego aquí\n"); }
+   
    bool updated = false;
 
    update_input();
@@ -1044,6 +1079,7 @@ void retro_run(void)
       update_audio_latency = false;
    }
 
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    /* This runs just a frame */
    #ifdef HAVE_DYNAREC
    if (dynarec_enable)
@@ -1052,8 +1088,11 @@ void retro_run(void)
    #endif
       execute_arm(execute_cycles);
 
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    render_audio();
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    video_run();
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
 
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE_UPDATE, &updated) && updated)
       check_variables(0);
@@ -1061,5 +1100,6 @@ void retro_run(void)
 
 unsigned retro_api_version(void)
 {
+   printf("FJTRUJY: %s, %s:%i\n", __FUNCTION__, __FILE__,__LINE__);
    return RETRO_API_VERSION;
 }

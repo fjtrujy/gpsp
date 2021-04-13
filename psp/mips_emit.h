@@ -3280,6 +3280,7 @@ static void emit_phand(
 // - mem stubs: There's stubs for load & store, and every memory region
 //    and possible operand size and misaligment (+sign extensions)
 void init_emitter() {
+  return;
   int i;
   // Initialize memory to a debuggable state
   memset(stub_arena, 0, sizeof(stub_arena));   // nop
